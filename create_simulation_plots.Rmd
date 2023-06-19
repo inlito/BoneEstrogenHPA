@@ -1,0 +1,368 @@
+---
+title: "Simulation plots"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE)
+library(reshape)
+library(ggplot2)
+```
+
+```{r normalize-df, echo=FALSE}
+normalize <- function(df, by_vec=NULL){
+  if (is.null(by_vec)) {
+    # df without first column (time) and the last column (the factor EST_group)
+    for (i in 2:(length(df)-1)) {
+      df[i] = df[i]/df[1, i]
+    }
+  }
+  else {
+    # df without first column (time) and the last column (the factor EST_group)
+    for (i in 2:(length(df)-1)) {
+      df[i] = df[i]/as.numeric(by_vec[i])
+    }
+  }
+  return(df)
+}
+```
+
+
+```{r plot_breaks, echo=FALSE}
+# Adjust x axis time labels according to simulation duration
+get_x_axis <- function(max_time) {
+  year <- 24*30*12
+  month <- 24*30
+  week <- 24*7
+  day <- 24
+  
+  n_year <- floor(max_time/year)
+  n_month <- floor(max_time/month)
+  n_week <- floor(max_time/week)
+  n_day <- floor(max_time/day)
+  
+  if (n_year > 1) {
+    breaks <- year*seq(1, n_year, 1)
+    labels <- as.character(seq(1, n_year, 1))
+    title <- "Time [years]" 
+  } else if (n_month > 1) {
+    breaks <- month*seq(1, n_month, 1)
+    labels <- as.character(seq(1, n_month, 1))
+    title <- "Time [months]"
+  } else if (n_week > 1){
+    breaks <- week*seq(1, n_week, 1)
+    labels <- as.character(seq(1, n_week, 1))
+    title <- "Time [weeks]"
+  } else if (n_day > 1){
+    breaks <- day*seq(1, n_day, 1)
+    labels <- as.character(seq(1, n_day, 1))
+    title <- "Time [days]"
+  } else {
+    breaks <- seq(1, max_time, 1)
+    labels <- as.character(seq(1, max_time, 1))
+    title <- "Time [hours]"
+  }
+  return(list(breaks=breaks, labels=labels, title=title))
+}
+```
+
+
+```{r build_df}
+
+build_df <- function(state, norm) {
+  df <- data.frame()
+  for (EST_group in c("baseline",  "postmeno_E2", "OC_EE")) {
+      name <- paste(state, EST_group, sep = "_")
+      do.call("<-", list(name, readRDS(paste0("simulations/", name, ".RDS"))))
+      # raw_df <- get(name)
+      if (norm == "relative") {
+        df <- rbind(df, normalize(get(name)))
+        
+      } else {
+        df <- rbind(df, get(name))
+      }
+  }
+  
+  abs_norm_vec <- head(df[df$EST_group == "baseline",], n=1)
+  
+  if (norm == "absolute") {
+    df <- normalize(df, by_vec=abs_norm_vec)
+  }
+  
+  return(df)
+}
+```
+
+
+```{r ranges, echo=FALSE}
+get_ranges <- function(df) {
+  ranges = list()
+  ranges$OC_OB <- round(range(range(df$OC), range(df$OB)), 10)
+  ranges$BMDfn <- round(range(df$BMDfn), 10)
+  ranges$PTH <- round(range(df$PTH), 10)
+  ranges$CRH_ACTH <- round(range(range(df$CRH), range(df$ACTH)), 10)
+  ranges$cortisol <- round(range(df$cortisol), 10)
+  ranges$corticotroph <- round(range(df$corticotroph_mass), 10)
+  ranges$adrenal <- round(range(df$adrenal_mass),10)
+  return(ranges)
+}
+```
+
+
+
+```{r plotter_gg, echo=FALSE}
+plotter <- function(state,  norm = "absolute") {
+  df <- build_df(state, norm)
+  
+  # Extract desired variables
+  df <- subset(df, select = c("time",
+                              "OC", 
+                              "OB",
+                              "BMDfn",
+                              "PTH", 
+                              "CRH", 
+                              "ACTH", 
+                              "cortisol", 
+                              "corticotroph_mass", 
+                              "adrenal_mass", 
+                              "EST_group"
+                              ))
+  
+  if (state != "stress") {
+    print(rbind(tail(df[df$EST_group == "baseline",], n=1), 
+              tail(df[df$EST_group == "postmeno_E2",], n=1),
+              tail(df[df$EST_group == "OC_EE",], n=1)))
+  } else {
+    baseline_df <- df[df$EST_group == "baseline",]
+    postmeno_df <- df[df$EST_group == "postmeno_E2",]
+    OC_EE_df <- df[df$EST_group == "OC_EE",]
+    
+    print(rbind(
+      baseline_df[baseline_df$"adrenal_mass" == max(baseline_df$"adrenal_mass"),],
+      postmeno_df[postmeno_df$"adrenal_mass" == max(postmeno_df$"adrenal_mass"),],
+      OC_EE_df[OC_EE_df$"adrenal_mass" == max(OC_EE_df$"adrenal_mass"),]
+      ))
+    
+  }
+  
+
+  # Define ranges for easier comparisons in finished plot
+  ranges <- get_ranges(df)
+  
+  # Reshape df to use facet_wrap in plot
+  df_long <- melt(df, id=c("time", "EST_group"), value.name = "DV")
+  df_long$EST_group <- factor(df_long$EST_group, levels = c("baseline", "OC_EE", "postmeno_E2"))
+  
+  # Define x_axis for different time periods
+  x_axis <- get_x_axis(df_long$time[length(df_long$time)])
+  
+  fig <- ggplot(df_long, aes(x = time, y = value, colour = EST_group)) +
+    geom_line() +
+    facet_wrap( ~ variable, ncol=3, scales="free_y") +
+    theme_bw() + 
+    labs(x = x_axis$title, 
+         y = ifelse(norm == "absolute", 
+                    "DV [absolute fold change]", 
+                    "DV [relative fold change]"),
+         colour = "Estrogen") +
+    scale_colour_manual(labels=c("Mean estradiol (ME2)", "Ethinyl estradiol (EE)", "Decreased estradiol (DE2)"),
+                        values=c("#808080", "#56B4E9", "#E69F00")) + #"#CC79A7",
+    scale_x_continuous(breaks = x_axis$breaks, labels=x_axis$labels, limits = c(1, NA)) +
+    theme(axis.text.x = element_text(angle=45, size = 5))
+  
+  fig <- fig + ggh4x::facetted_pos_scales(y = list(variable == "OC" ~ scale_y_continuous(limits = ranges$OC_OB),
+                                                   variable == "OB" ~ scale_y_continuous(limits = ranges$OC_OB),
+                                                   variable == "BMDfn" ~ scale_y_continuous(limits = ranges$BMDfn),
+                                                   variable == "PTH" ~ scale_y_continuous(limits = ranges$PTH),
+                                                   variable == "CRH" ~ scale_y_continuous(limits = ranges$CRH_ACTH),
+                                                   variable == "ACTH" ~ scale_y_continuous(limits = ranges$CRH_ACTH),
+                                                   variable == "cortisol" ~ scale_y_continuous(limits = ranges$cortisol),
+                                                   variable == "corticotroph_mass" ~ scale_y_continuous(limits = ranges$corticotroph),
+                                                   variable == "adrenal_mass" ~ scale_y_continuous(limits = ranges$adrenal)
+                                          ))
+  
+  plot_name = paste(norm, state, sep="_")
+  file = paste0("plots/", plot_name, ".svg")
+  dir.create(dirname(file), showWarnings = FALSE)
+  svg(file=file)
+  print(fig)
+  invisible(dev.off())
+  fig
+}
+```
+
+
+\
+\
+\
+
+#### Simulation 28 days premenopause
+```{r premenopause_graph, echo=FALSE}
+premeno_E2 <- function(day) {
+  cycle_len <- 28
+  112 + 
+    100 * exp(-((day%%cycle_len-(cycle_len-17))**2)/cycle_len) + 
+    700 * exp(-((day%%cycle_len-(cycle_len-15))**2)/4) + 
+    500 * exp(-((day%%cycle_len-(cycle_len-5))**2)/12)
+}
+
+day <- 1:30
+mean_by_day <- c(112, 121, 122, 121, 125, 147, 153, 181, 217, 227, 285, 361, 508, 720, 921, 887, 387, 282, 387, 454, 505, 531, 543, 524, 524, 456, 386, 304, 225, 173)  # data from supplementary here: https://www.sciencedirect.com/science/article/pii/S0009898119318121?via%3Dihub
+model_function <- c(premeno_E2(1:28), NA, NA)
+mean_over_days <- rep(mean(mean_by_day), length(day))
+
+
+df_premenopause_EST_group <- data.frame(day, mean_by_day, model_function, mean_over_days)
+df_melt <- melt(df_premenopause_EST_group, id.var="day", variable_name = "EST_group")
+df_melt$EST_group <- factor(df_melt$EST_group, levels = c("mean_by_day", "model_function", "mean_over_days"))
+
+
+premenopause_plot <- ggplot(data=df_melt, aes(x=day, y=value, colour=EST_group)) +
+  
+  geom_point(data=subset(df_melt, EST_group == "mean_by_day")) +
+  geom_line(data=subset(df_melt, EST_group == "model_function")) +
+  geom_line(data=subset(df_melt, EST_group == "mean_over_days")) +
+  theme_bw() +
+  scale_colour_manual(values=c("#000000","#808080", "#CC79A7"), 
+                      guide = guide_legend(override.aes = list(linetype = c("blank", "solid","solid"),
+                                                               shape = c(16,NA,NA)))) +
+  scale_x_continuous(limits = c(1, 30), breaks = seq(1, 30, 1)) +
+  scale_y_continuous(limits = c(50, 950), breaks = seq(50, 900, 50)) +
+  
+  labs(x = "Time [days]", y = "Concentration [pmol/L]", colour = "Estradiol level")
+
+
+svg(file="plots/cycle_plot.svg")
+print(premenopause_plot)
+invisible(dev.off())
+premenopause_plot
+```
+
+
+
+
+#### Simulation 10 years with initial values from old model, base to steady 
+```{r base, echo=FALSE}
+plotter("base")
+```
+
+
+#### No stress, absolute
+```{r no_stress_abs, echo=FALSE}
+plotter("constant")
+```
+\
+
+
+#### No stress, relative
+```{r no_stress_rel, echo=FALSE}
+plotter("constant", norm="relative")
+```
+
+\
+\
+\
+#### With stress test between day 100 and 190, absolute
+
+```{r stress_abs, echo=FALSE}
+plotter("stress")
+```
+
+\
+
+#### With stress test between day 100 and 190, relative
+```{r stress_rel, echo=FALSE}
+plotter("stress", norm = "relative")
+```
+
+
+\
+\
+\
+
+
+#### Primary hyperparathyroidism by longitudinal PTH increase, absolute
+```{r primary_hyper_abs, echo=FALSE}
+plotter("primary_hyper_long")
+```
+\
+
+#### Primary hyperparathyroidism by longitudinal PTH increase, relative
+```{r primary_hyper_rel, echo=FALSE}
+plotter("primary_hyper_long", norm="relative")
+```
+
+
+
+\
+\
+\
+
+#### Secondary hyperparathyroidism by immediate GFR drop, absolute
+```{r echo=FALSE}
+plotter("secondary_hyper_immediate")
+```
+
+\
+
+
+#### Secondary hyperparathyroidism by immediate GFR drop, relative
+```{r echo=FALSE}
+plotter("secondary_hyper_immediate", norm="relative")
+```
+
+
+\
+\
+\
+
+
+#### Primary hypoparathyroidism, absolute
+```{r echo=FALSE}
+plotter("primary_hypo")
+```
+
+\
+
+#### Primary hypoparathyroidism, relative
+```{r echo=FALSE}
+plotter("primary_hypo", norm="relative")
+```
+
+
+\
+\
+\
+#### With stress test between day 6 and 17, absolute
+
+```{r stress_follicular_abs, echo=FALSE}
+# plotter("stress_follicular")
+```
+
+\
+
+#### With stress test between day 6 and 17, relative
+```{r stress_follicular_rel, echo=FALSE}
+# plotter("stress_follicular", norm = "relative")
+```
+
+
+\
+\
+\
+#### With stress test between day 17 and 28, absolute
+
+```{r stress_luteal_abs, echo=FALSE}
+# plotter("stress_luteal")
+```
+
+\
+
+#### With stress test between day 17 and 28, relative
+```{r stress_luteal_rel, echo=FALSE}
+# plotter("stress_luteal", norm = "relative")
+```
