@@ -12,7 +12,7 @@ The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.b
 - Effects of estrogen (independently of type) on different bone factors
 
 ## Limitations
-There are a lot of limitations to this model
+There are a lot of limitations to this model, some of them are:
 - First of all, it does not contain any age-related effects.
 - Relationship between _endogenous_ cortisol and bone needs more research [[3]](https://doi.org/10.3389/fendo.2018.00526)
 - Estradiol levels cycles during premenopausal years, but this had noe effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well. 
