@@ -15,7 +15,13 @@ The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.b
 There are a lot of limitations to this model, some of them are:
 - It does not contain any age-related effects.
 - Relationship between _endogenous_ cortisol and bone needs more research [[3]](https://doi.org/10.3389/fendo.2018.00526)
-- Estradiol levels cycles during premenopausal years, but this had noe effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well. 
+- Estradiol levels cycles during premenopausal years, but this had noe effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well.
+- If modeling a premenopausal state, other important hormones such as progesterone, luteinizing hormone (LH) and follicular-stimulating hormone (FSH) should be included.
+- If modeling a oral contraceptive state, effects of different progestins and dosages should be taken into account as well as degree of suppresion of ovarian hormones.
+- Receptor activity (e.g. GR, different ERs) and enzyme activity (e.g. 11-beta-HSD1 and 11-beta-HSD2 and aromatase) would be nice to include in the model
+- Since estradiol is synthesised by testosterone and estrone, this would be interesting to include.
+- Ethinyl estradiol actions on hepatic protein production besides cortisol binding globulin (CBG). (Especially IGF-1 in relation to bone)
+- Free vs bound hormones should be taken into account
 
 ## Sources
 - [1]   Peterson, M. C., & Riggs, M. M. (2010). A physiologically based mathematical model of integrated calcium homeostasis and bone remodeling. In Bone (Vol. 46, Issue 1, pp. 49–63). Elsevier BV. https://doi.org/10.1016/j.bone.2009.08.053
