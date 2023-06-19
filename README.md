@@ -3,7 +3,7 @@
 A combined mathematical model of the hypothalamus-pituitary-adrenal (HPA) axis and the calcium-
 parathyroid-vitamin D (Ca-PTH-D) axis with added effects of mean estradiol in premenopausal women, decreased estradiol according to postmenopausal levels,  and ethinyl estradiol according to levels in combined oral contraceptives.
 
-The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.bone.2009.08.053) serves as the foundation, it is expanded with the incorporation of the HPA axis model presented Karin et al. from 2020 [[2]]([url](https://doi.org/10.15252/msb.20209510)).
+The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.bone.2009.08.053) serves as the foundation, it is expanded with the incorporation of the HPA axis model presented Karin et al. from 2020 [[2]](https://doi.org/10.15252/msb.20209510).
 
 
 ## Introduced effects
@@ -14,8 +14,8 @@ The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.b
 ## Limitations
 There are a lot of limitations to this model
 - First of all, it does not contain any age-related effects.
-- Relationship between _endogenous_ cortisol and bone needs more research [[3]]([url](https://doi.org/10.3389/fendo.2018.00526))
-- Estradiol levels cycles during premenopausal years, but this had noe effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]]([url](https://doi.org/10.3389/fendo.2020.00311)), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well. 
+- Relationship between _endogenous_ cortisol and bone needs more research [[3]](https://doi.org/10.3389/fendo.2018.00526)
+- Estradiol levels cycles during premenopausal years, but this had noe effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well. 
 
 ## Sources
 - [1]   Peterson, M. C., & Riggs, M. M. (2010). A physiologically based mathematical model of integrated calcium homeostasis and bone remodeling. In Bone (Vol. 46, Issue 1, pp. 49–63). Elsevier BV. https://doi.org/10.1016/j.bone.2009.08.053
