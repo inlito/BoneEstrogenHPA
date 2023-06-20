@@ -1624,28 +1624,6 @@ display: none;
 </div>
 
 
-<pre class="r"><code>build_df &lt;- function(state, norm) {
-  df &lt;- data.frame()
-  for (EST_group in c(&quot;baseline&quot;,  &quot;postmeno_E2&quot;, &quot;OC_EE&quot;)) {
-      name &lt;- paste(state, EST_group, sep = &quot;_&quot;)
-      do.call(&quot;&lt;-&quot;, list(name, readRDS(paste0(&quot;simulations/&quot;, name, &quot;.RDS&quot;))))
-      # raw_df &lt;- get(name)
-      if (norm == &quot;relative&quot;) {
-        df &lt;- rbind(df, normalize(get(name)))
-        
-      } else {
-        df &lt;- rbind(df, get(name))
-      }
-  }
-  
-  abs_norm_vec &lt;- head(df[df$EST_group == &quot;baseline&quot;,], n=1)
-  
-  if (norm == &quot;absolute&quot;) {
-    df &lt;- normalize(df, by_vec=abs_norm_vec)
-  }
-  
-  return(df)
-}</code></pre>
 <p><br />
 <br />
 <br />

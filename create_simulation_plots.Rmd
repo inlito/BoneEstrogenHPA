@@ -71,7 +71,7 @@ get_x_axis <- function(max_time) {
 ```
 
 
-```{r build_df}
+```{r build_df, echo=FALSE}
 
 build_df <- function(state, norm) {
   df <- data.frame()
