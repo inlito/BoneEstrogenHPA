@@ -7,6 +7,15 @@ The model was made as part of a master thesis project where it was simulated wit
 
 The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.bone.2009.08.053) serves as the foundation, it is expanded with the incorporation of the HPA axis model developed by Karin et al. from 2020 [[2]](https://doi.org/10.15252/msb.20209510).
 
+## How to run it
+Simulations are created by running the main.r file in the model_code folder. Plots of the simulations can then be rendered by running the create_simulation_plots rmd. 
+
+## How to change it
+Constant parameters can be added to params.r. 
+Introduction of new species to the model must have an initial value in the initial.r script as well as a name in the compartments.r script.
+Differential equations for the new species are added in the model.r script together with other effects.
+After making changes to model.r, a new steady state of this new model must me created before simulating stress or parathyroid disease states. This will probably take a while, depending on computer performance.
+
 
 ## Introduced effects
 - Stimulatory effect of ethinyl estradiol (EE) on _total serum_ cortisol
