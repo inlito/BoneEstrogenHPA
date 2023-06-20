@@ -1,9 +1,11 @@
 # BoneEstrogenHPA
 
 A combined mathematical model of the hypothalamus-pituitary-adrenal (HPA) axis and the calcium-
-parathyroid-vitamin D (Ca-PTH-D) axis with added effects of mean estradiol in premenopausal women, decreased estradiol according to postmenopausal levels,  and ethinyl estradiol according to levels in combined oral contraceptives.
+parathyroid-vitamin D (Ca-PTH-D) axis with added effects of mean estradiol in premenopausal women, decreased estradiol according to postmenopausal levels, and ethinyl estradiol according to levels in combined oral contraceptives.
 
-The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.bone.2009.08.053) serves as the foundation, it is expanded with the incorporation of the HPA axis model presented Karin et al. from 2020 [[2]](https://doi.org/10.15252/msb.20209510).
+The model was made as part of a master thesis project where it was simulated with a stress input, under primary hyperparathyroidism, under secondary hyperparathyroidism or under primary hypoparathyroidism.
+
+The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.bone.2009.08.053) serves as the foundation, it is expanded with the incorporation of the HPA axis model developed by Karin et al. from 2020 [[2]](https://doi.org/10.15252/msb.20209510).
 
 
 ## Introduced effects
@@ -15,11 +17,11 @@ The Bone model by Peterson and Riggs from 2010 [[1]](https://doi.org/10.1016/j.b
 There are a lot of limitations to this model, some of them are:
 - It does not contain any age-related effects.
 - Relationship between _endogenous_ cortisol and bone needs more research [[3]](https://doi.org/10.3389/fendo.2018.00526)
-- Estradiol levels cycles during premenopausal years, but this had noe effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well.
+- Estradiol levels cycles during premenopausal years, but this had no effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well.
 - If modeling a premenopausal state, other important hormones such as progesterone, luteinizing hormone (LH) and follicular-stimulating hormone (FSH) should be included.
-- If modeling a oral contraceptive state, effects of different progestins and dosages should be taken into account as well as degree of suppresion of ovarian hormones.
+- If modeling an oral contraceptive state, effects of different progestins and dosages should be taken into account as well as degree of suppression of ovarian hormones.
 - Receptor activity (e.g. GR, different ERs) and enzyme activity (e.g. 11-beta-HSD1 and 11-beta-HSD2 and aromatase) would be nice to include in the model
-- Since estradiol is synthesised by testosterone and estrone, this would be interesting to include.
+- Since estradiol is synthesized from testosterone and estrone, this would be interesting to include.
 - Ethinyl estradiol actions on hepatic protein production besides cortisol binding globulin (CBG). (Especially IGF-1 in relation to bone)
 - Free vs bound hormones should be taken into account
 
