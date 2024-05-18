@@ -26,7 +26,7 @@ After making changes to model.r, a new steady state of this new model must me cr
 There are a lot of limitations to this model, some of them are:
 - It does not contain any age-related effects.
 - Relationship between _endogenous_ cortisol and bone needs more research [[3]](https://doi.org/10.3389/fendo.2018.00526)
-- Estradiol levels cycles during premenopausal years, but this had no effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within follicular and lutal phase as well.
+- Estradiol levels cycles during premenopausal years, but this had no effect compared to mean cycling level. It is suggested that cortisol is higher in the follicular phase versus the luteal phase [[4]](https://doi.org/10.3389/fendo.2020.00311), but more research is needed regarding this topic as well. Preferrably day-to-day cortisol levels as estradiol levels vary a lot within the follicular and luteal phase as well.
 - If modeling a premenopausal state, other important hormones such as progesterone, luteinizing hormone (LH) and follicular-stimulating hormone (FSH) should be included.
 - If modeling an oral contraceptive state, effects of different progestins and dosages should be taken into account as well as degree of suppression of ovarian hormones.
 - Receptor activity (e.g. GR, different ERs) and enzyme activity (e.g. 11-beta-HSD1 and 11-beta-HSD2 and aromatase) would be nice to include in the model
